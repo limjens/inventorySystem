@@ -2,66 +2,122 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Login | FlowStock</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <title>FlowStock · Glassmorphism Login</title>
+  
+  <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
-  <!-- Font Awesome for optional icons (optional but adds a nice touch) -->
+  
+  <!-- Font Awesome Icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-  <style>
-    /* subtle background gradient - pure tailwind alternative but inline style is fine */
-  </style>
+  
+  <!-- Custom CSS (separate file) -->
+  <link rel="stylesheet" href="customcss.css">
 </head>
-<body class="flex items-center justify-center min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 p-4">
+<body class="relative flex items-center justify-center min-h-screen p-4">
 
-  <div class="w-full max-w-md">
-    <!-- Main Login Card -->
-    <div class="bg-white rounded-2xl shadow-xl p-8 border border-gray-100">
-      <!-- Logo/Branding -->
-      <div class="flex justify-center mb-6">
-        <div class="bg-indigo-600 p-3 rounded-full shadow-md">
-          <i class="fas fa-boxes text-white text-2xl"></i>
+  <!-- BACKGROUND IMAGE with overlay -->
+  <div class="bg-image-container">
+    <img src="https://images.pexels.com/photos/4483610/pexels-photo-4483610.jpeg?auto=compress&cs=tinysrgb&w=1600&h=900&fit=crop" 
+         alt="inventory warehouse background" 
+         class="bg-image">
+    <div class="dark-overlay"></div>
+    <div class="gradient-overlay"></div>
+  </div>
+
+  <!-- MAIN LOGIN CARD -->
+  <div class="w-full max-w-md relative z-10">
+    <div class="glass-card p-6 md:p-8">
+      
+      <!-- FlowStock Branding -->
+      <div class="flex flex-col items-center text-center mb-6">
+        <div class="flex items-center justify-center gap-3 mb-2">
+          <i class="fas fa-boxes-stacked text-4xl text-white drop-shadow-lg"></i>
+          <h1 class="text-4xl font-extrabold tracking-tight text-white">FlowStock</h1>
+        </div>
+        <div class="flex items-center gap-2 mt-1 backdrop-blur-sm bg-white/10 px-3 py-1 rounded-full">
+          <i class="fas fa-microchip text-white/80 text-[11px]"></i>
+          <p class="text-white/90 text-xs font-medium tracking-wide">inventory • realtime • glass</p>
         </div>
       </div>
       
-      <h2 class="text-2xl font-bold text-center text-gray-800 mb-2">Welcome Back</h2>
-      <p class="text-center text-gray-500 text-sm mb-6">Sign in to your inventory dashboard</p>
-      
-      <!-- Login Form -->
-      <div class="space-y-3">
-        <div class="relative">
-          <i class="fas fa-user absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 text-sm"></i>
-          <input id="username" placeholder="Username" class="border border-gray-300 p-2.5 pl-10 w-full rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:border-transparent transition">
+      <!-- Subtle divider -->
+      <div class="text-center mt-1 mb-5">
+        <div class="w-16 h-0.5 bg-white/40 mx-auto rounded-full"></div>
+        <p class="text-white/80 text-sm font-medium mt-2 flex items-center justify-center gap-1">
+          <i class="fas fa-lock-open text-[10px]"></i> secure access
+        </p>
+      </div>
+
+      <!-- LOGIN FORM - Preserved IDs: username & password -->
+      <div class="space-y-5">
+        <!-- Username field -->
+        <div class="relative input-wrapper">
+          <i class="fas fa-user absolute left-4 top-1/2 transform -translate-y-1/2 text-white/80 input-icon"></i>
+          <input type="text" 
+                 id="username" 
+                 name="username"
+                 placeholder="Username or email" 
+                 class="glass-input w-full py-3.5 pl-11 pr-4 text-white placeholder-white/70 font-medium text-base">
         </div>
-        <div class="relative">
-          <i class="fas fa-lock absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 text-sm"></i>
-          <input id="password" type="password" placeholder="Password" class="border border-gray-300 p-2.5 pl-10 w-full rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:border-transparent transition">
+        
+        <!-- Password field -->
+        <div class="relative input-wrapper">
+          <i class="fas fa-key absolute left-4 top-1/2 transform -translate-y-1/2 text-white/80 input-icon"></i>
+          <input type="password" 
+                 id="password" 
+                 name="password"
+                 placeholder="Password" 
+                 class="glass-input w-full py-3.5 pl-11 pr-4 text-white placeholder-white/70 font-medium text-base">
         </div>
-        <button onclick="login()" class="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold w-full py-2.5 rounded-lg transition duration-200 shadow-md hover:shadow-lg flex items-center justify-center gap-2">
-          <i class="fas fa-sign-in-alt"></i> Login
+        
+        <!-- Remember me & Forgot password row -->
+        <div class="flex items-center justify-between text-white/80 text-xs px-1">
+          <label class="flex items-center gap-2 cursor-pointer">
+            <input type="checkbox" class="custom-check rounded border-white/40">
+            <span>Keep me signed in</span>
+          </label>
+          <a href="#" class="forgot-link transition">Forgot password?</a>
+        </div>
+        
+        <!-- LOGIN BUTTON - Preserved onclick="login()" -->
+        <button onclick="login()" class="btn-glass-login w-full py-3.5 rounded-2xl text-white font-bold text-base flex items-center justify-center gap-2">
+          <i class="fas fa-arrow-right-to-bracket text-sm"></i>
+          <span>Login to FlowStock</span>
         </button>
       </div>
       
-      <p class="mt-5 text-sm text-center text-gray-600">
-        Don't have an account? 
-        <a href="register.html" class="text-indigo-600 hover:text-indigo-800 font-medium transition">Create account</a>
-      </p>
+      <!-- Register page link - goes to register.html -->
+      <div class="mt-8 text-center text-white/90 text-sm">
+        <span class="opacity-80">New to the platform?</span>
+        <a href="register.html" class="glass-link ml-2 font-semibold inline-flex items-center gap-1">
+          Create account <i class="fas fa-arrow-right text-xs"></i>
+        </a>
+      </div>
+      
+      <!-- Footer credit -->
+      <div class="mt-6 pt-3 text-center text-white/50 text-[11px] border-t border-white/20 flex justify-center gap-4">
+        <span><i class="far fa-circle-check mr-1"></i> Secure access</span>
+        <span><i class="fas fa-database mr-1"></i> Real-time inventory</span>
+      </div>
     </div>
     
-    <!-- FOOTER - Crediting an Indian developer -->
-    <div class="mt-6 text-center">
-      <p class="text-gray-500 text-xs sm:text-sm flex items-center justify-center gap-1 flex-wrap">
-        <i class="fas fa-code text-indigo-400"></i>
-        Made with <i class="fas fa-heart text-red-400 mx-1 text-xs"></i> by 
-        <span class="font-semibold text-gray-700">Rajesh Kumar</span>
-        <span class="mx-1">•</span>
-        <i class="fas fa-map-marker-alt text-green-500 text-xs"></i>
-        <span class="text-gray-500">India</span>
-      </p>
-      <p class="text-gray-400 text-xs mt-1">© 2025 Inventory System | All rights reserved</p>
+    <!-- Developer credit -->
+    <div class="footer-glass mt-6 text-center">
+      <i class="fas fa-code text-indigo-200 text-xs"></i>
+      <span>Made with <i class="fas fa-heart text-rose-300 mx-0.5 text-[11px]"></i> by <span class="font-semibold text-white">Rajesh Kumar</span></span>
+      <span class="mx-0.5 opacity-50">•</span>
+      <i class="fas fa-map-marker-alt text-emerald-300 text-[11px]"></i>
+      <span class="text-white/90">India</span>
+      <span class="mx-0.5 opacity-50">•</span>
+      <span>© 2025 FlowStock</span>
     </div>
   </div>
 
+  <!-- External auth.js (your existing login logic - DO NOT MODIFY) -->
   <script src="js/auth.js"></script>
-
+  
+  <!-- External animations.js (separate file for UI animations only) -->
+  <script src="animations.js"></script>
 </body>
 </html>
