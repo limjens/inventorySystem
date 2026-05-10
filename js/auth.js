@@ -1,9 +1,10 @@
-let users = JSON.parse(localStorage.getItem("users")) || [
-  { username: "admin", password: "1234" },
-];
+// ============================================================
+// AUTH — connects to API
+// ============================================================
 
-// REGISTER
-function register() {
+const API = "http://localhost:3000/api";
+
+async function register() {
   const username = document.getElementById("regUsername").value;
   const password = document.getElementById("regPassword").value;
 
@@ -12,49 +13,59 @@ function register() {
     return;
   }
 
-  const exists = users.find((u) => u.username === username);
+  const res = await fetch(`${API}/auth/register`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    credentials: "include",
+    body: JSON.stringify({ username, password }),
+  });
 
-  if (exists) {
-    alert("User already exists");
+  const data = await res.json();
+
+  if (!res.ok) {
+    alert(data.message);
     return;
   }
-
-  users.push({ username, password });
-  localStorage.setItem("users", JSON.stringify(users));
 
   alert("Registered successfully!");
   window.location.href = "login.html";
 }
 
-// LOGIN
-function login() {
+async function login() {
   const username = document.getElementById("username").value;
   const password = document.getElementById("password").value;
 
-  const user = users.find(
-    (u) => u.username === username && u.password === password,
-  );
+  const res = await fetch(`${API}/auth/login`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    credentials: "include",
+    body: JSON.stringify({ username, password }),
+  });
 
-  if (!user) {
-    alert("Invalid credentials");
+  const data = await res.json();
+
+  if (!res.ok) {
+    alert(data.message);
     return;
   }
 
-  localStorage.setItem("currentUser", JSON.stringify(user));
+  sessionStorage.setItem("user", JSON.stringify(data.user));
   window.location.href = "dashboard.html";
 }
 
-// AUTH CHECK (for protected pages later)
-function checkAuth() {
-  const user = localStorage.getItem("currentUser");
-
+async function checkAuth() {
+  const user = sessionStorage.getItem("user");
   if (!user) {
     window.location.href = "login.html";
+    return;
   }
 }
 
-// LOGOUT
-function logout() {
-  localStorage.removeItem("currentUser");
+async function logout() {
+  await fetch(`${API}/auth/logout`, {
+    method: "POST",
+    credentials: "include",
+  });
+  sessionStorage.removeItem("user");
   window.location.href = "login.html";
 }
