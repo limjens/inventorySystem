@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <title>FlowStock | Inventory Dashboard</title>
+  <!-- Tailwind CSS + Font Awesome Icons -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <!-- Configure Tailwind theme (optional but keeps consistent) -->
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            'sans': ['Inter', 'system-ui', 'Segoe UI', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+  <!-- Google Fonts (Inter) for modern look -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+</head>
+<body class="bg-gradient-to-br from-slate-50 to-gray-100 p-6 md:p-8 font-sans antialiased">
+
+  <!-- Auth script (external file reference, but we keep your original includes) -->
+  <script src="js/auth.js"></script>
+  <script>
+    checkAuth();
+  </script>
+
+  <!-- MAIN CONTAINER -->
+  <div class="max-w-7xl mx-auto">
+
+    <!-- HEADER SECTION with glassmorphic style -->
+    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8">
+      <div class="flex items-center gap-3">
+        <div class="bg-indigo-600 p-2.5 rounded-xl shadow-md">
+          <i class="fas fa-boxes text-white text-xl"></i>
+        </div>
+        <div>
+          <h1 class="text-3xl font-extrabold tracking-tight text-gray-800">Inventory Dashboard</h1>
+          <p class="text-sm text-gray-500 mt-0.5 flex items-center gap-1"><i class="fas fa-warehouse text-gray-400 text-xs"></i> Manage products, stock & prices</p>
+        </div>
+      </div>
+      <button onclick="logout()" class="bg-red-500 hover:bg-red-600 transition-all duration-200 shadow-md hover:shadow-lg text-white px-5 py-2.5 rounded-xl flex items-center gap-2 font-medium text-sm">
+        <i class="fas fa-sign-out-alt"></i> Logout
+      </button>
+    </div>
+
+    <!-- ADD PRODUCT CARD - Enhanced with icons & better spacing -->
+    <div class="bg-white rounded-2xl shadow-lg border border-gray-100 p-5 mb-8 transition-all hover:shadow-xl">
+      <div class="flex items-center gap-2 mb-4 border-b border-gray-100 pb-2">
+        <i class="fas fa-plus-circle text-indigo-500 text-xl"></i>
+        <h2 class="font-bold text-lg text-gray-700">Add new product</h2>
+        <span class="bg-gray-100 text-gray-500 text-xs px-2 py-0.5 rounded-full ml-2">instant</span>
+      </div>
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-4">
+        <div class="relative">
+          <i class="fas fa-tag absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 text-sm"></i>
+          <input id="name" placeholder="Product name" class="w-full border border-gray-200 rounded-xl pl-10 pr-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-indigo-300 focus:border-transparent transition-all">
+        </div>
+        <div class="relative">
+          <i class="fas fa-dollar-sign absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 text-sm"></i>
+          <input id="price" type="number" placeholder="Price ($)" class="w-full border border-gray-200 rounded-xl pl-10 pr-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-indigo-300 focus:border-transparent transition-all">
+        </div>
+        <div class="relative">
+          <i class="fas fa-cubes absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 text-sm"></i>
+          <input id="stock" type="number" placeholder="Stock quantity" class="w-full border border-gray-200 rounded-xl pl-10 pr-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-indigo-300 focus:border-transparent transition-all">
+        </div>
+      </div>
+      <button onclick="addProduct()" class="bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2.5 px-6 rounded-xl shadow-md transition-all duration-200 flex items-center gap-2 justify-center w-full sm:w-auto">
+        <i class="fas fa-save"></i> Add product
+      </button>
+    </div>
+
+    <!-- STATS SUMMARY (dynamic info based on inventory) - purely UI enhancement -->
+    <div class="grid grid-cols-1 sm:grid-cols-3 gap-5 mb-8" id="statsPanel">
+      <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-4 flex items-center gap-4">
+        <div class="bg-blue-50 p-3 rounded-xl">
+          <i class="fas fa-box-open text-blue-600 text-xl"></i>
+        </div>
+        <div>
+          <p class="text-gray-500 text-xs font-medium uppercase tracking-wider">Total Products</p>
+          <p class="text-2xl font-bold text-gray-800" id="totalProductsCount">0</p>
+        </div>
+      </div>
+      <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-4 flex items-center gap-4">
+        <div class="bg-emerald-50 p-3 rounded-xl">
+          <i class="fas fa-chart-line text-emerald-600 text-xl"></i>
+        </div>
+        <div>
+          <p class="text-gray-500 text-xs font-medium uppercase tracking-wider">Total Value</p>
+          <p class="text-2xl font-bold text-gray-800" id="totalValue">$0</p>
+        </div>
+      </div>
+      <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-4 flex items-center gap-4">
+        <div class="bg-amber-50 p-3 rounded-xl">
+          <i class="fas fa-archive text-amber-600 text-xl"></i>
+        </div>
+        <div>
+          <p class="text-gray-500 text-xs font-medium uppercase tracking-wider">Low Stock Alerts</p>
+          <p class="text-2xl font-bold text-gray-800" id="lowStockCount">0</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- PRODUCT TABLE - enhanced with icons, badges, and better responsiveness -->
+    <div class="bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden">
+      <div class="overflow-x-auto">
+        <table class="w-full">
+          <thead class="bg-gradient-to-r from-gray-50 to-gray-100 border-b border-gray-200">
+            <tr>
+              <th class="px-5 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider"><i class="fas fa-hashtag mr-1 text-gray-400"></i> ID</th>
+              <th class="px-5 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider"><i class="fas fa-box mr-1 text-gray-400"></i> Name</th>
+              <th class="px-5 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider"><i class="fas fa-dollar-sign mr-1 text-gray-400"></i> Price</th>
+              <th class="px-5 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider"><i class="fas fa-cubes mr-1 text-gray-400"></i> Stock</th>
+              <th class="px-5 py-4 text-center text-xs font-semibold text-gray-600 uppercase tracking-wider"><i class="fas fa-tools mr-1 text-gray-400"></i> Actions</th>
+            </tr>
+          </thead>
+          <tbody id="table" class="divide-y divide-gray-100 bg-white"></tbody>
+        </table>
+      </div>
+      <div id="emptyState" class="hidden py-12 text-center bg-white">
+        <i class="fas fa-database text-gray-300 text-5xl mb-3"></i>
+        <p class="text-gray-400 font-medium">No products found. Add your first product above!</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- inventory.js should contain actual CRUD + data logic -->
+  <script src="js/inventory.js"></script>

@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login | FlowStock</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Font Awesome for optional icons (optional but adds a nice touch) -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    /* subtle background gradient - pure tailwind alternative but inline style is fine */
+  </style>
+</head>
+<body class="flex items-center justify-center min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 p-4">
+
+  <div class="w-full max-w-md">
+    <!-- Main Login Card -->
+    <div class="bg-white rounded-2xl shadow-xl p-8 border border-gray-100">
+      <!-- Logo/Branding -->
+      <div class="flex justify-center mb-6">
+        <div class="bg-indigo-600 p-3 rounded-full shadow-md">
+          <i class="fas fa-boxes text-white text-2xl"></i>
+        </div>
+      </div>
+      
+      <h2 class="text-2xl font-bold text-center text-gray-800 mb-2">Welcome Back</h2>
+      <p class="text-center text-gray-500 text-sm mb-6">Sign in to your inventory dashboard</p>
+      
+      <!-- Login Form -->
+      <div class="space-y-3">
+        <div class="relative">
+          <i class="fas fa-user absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 text-sm"></i>
+          <input id="username" placeholder="Username" class="border border-gray-300 p-2.5 pl-10 w-full rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:border-transparent transition">
+        </div>
+        <div class="relative">
+          <i class="fas fa-lock absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 text-sm"></i>
+          <input id="password" type="password" placeholder="Password" class="border border-gray-300 p-2.5 pl-10 w-full rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:border-transparent transition">
+        </div>
+        <button onclick="login()" class="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold w-full py-2.5 rounded-lg transition duration-200 shadow-md hover:shadow-lg flex items-center justify-center gap-2">
+          <i class="fas fa-sign-in-alt"></i> Login
+        </button>
+      </div>
+      
+      <p class="mt-5 text-sm text-center text-gray-600">
+        Don't have an account? 
+        <a href="register.html" class="text-indigo-600 hover:text-indigo-800 font-medium transition">Create account</a>
+      </p>
+    </div>
+    
+    <!-- FOOTER - Crediting an Indian developer -->
+    <div class="mt-6 text-center">
+      <p class="text-gray-500 text-xs sm:text-sm flex items-center justify-center gap-1 flex-wrap">
+        <i class="fas fa-code text-indigo-400"></i>
+        Made with <i class="fas fa-heart text-red-400 mx-1 text-xs"></i> by 
+        <span class="font-semibold text-gray-700">Rajesh Kumar</span>
+        <span class="mx-1">•</span>
+        <i class="fas fa-map-marker-alt text-green-500 text-xs"></i>
+        <span class="text-gray-500">India</span>
+      </p>
+      <p class="text-gray-400 text-xs mt-1">© 2025 Inventory System | All rights reserved</p>
+    </div>
+  </div>
+
+  <script src="js/auth.js"></script>
+
+</body>
+</html>
