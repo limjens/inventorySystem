@@ -1,11 +1,17 @@
 // ============================================================
-// INVENTORY — connects to API
+// INVENTORY — connects to API using JWT
 // ============================================================
 
-const API = "http://localhost:3000/api";
+function getHeaders() {
+  const token = localStorage.getItem("token");
+  return {
+    "Content-Type": "application/json",
+    Authorization: `Bearer ${token}`,
+  };
+}
 
 async function fetchProducts() {
-  const res = await fetch(`${API}/products`, { credentials: "include" });
+  const res = await fetch(`${API}/products`, { headers: getHeaders() });
   if (res.status === 401) {
     window.location.href = "login.html";
     return [];
@@ -21,11 +27,11 @@ async function render() {
   products.forEach((p) => {
     table.innerHTML += `
       <tr class="text-center border-t">
-        <td>${p.id}</td>
-        <td>${p.name}</td>
-        <td>${p.price}</td>
-        <td>${p.stock}</td>
-        <td>
+        <td class="px-5 py-3">${p.id}</td>
+        <td class="px-5 py-3">${p.name}</td>
+        <td class="px-5 py-3">$${p.price}</td>
+        <td class="px-5 py-3">${p.stock}</td>
+        <td class="px-5 py-3">
           <button onclick="addStock('${p.id}')"
             class="bg-green-500 text-white px-2 py-1 rounded">+Stock</button>
           <button onclick="deleteProduct('${p.id}')"
@@ -47,8 +53,7 @@ async function addProduct() {
 
   const res = await fetch(`${API}/products`, {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
-    credentials: "include",
+    headers: getHeaders(),
     body: JSON.stringify({ name, price, stock }),
   });
 
@@ -71,8 +76,7 @@ async function addStock(id) {
 
   const res = await fetch(`${API}/products/${id}`, {
     method: "PUT",
-    headers: { "Content-Type": "application/json" },
-    credentials: "include",
+    headers: getHeaders(),
     body: JSON.stringify({
       name: p.name,
       price: p.price,
@@ -90,7 +94,7 @@ async function addStock(id) {
 async function deleteProduct(id) {
   const res = await fetch(`${API}/products/${id}`, {
     method: "DELETE",
-    credentials: "include",
+    headers: getHeaders(),
   });
 
   if (!res.ok) {
@@ -101,5 +105,8 @@ async function deleteProduct(id) {
 }
 
 // INIT
-checkAuth();
-render();
+if (!checkAuth()) {
+  // redirected
+} else {
+  render();
+}

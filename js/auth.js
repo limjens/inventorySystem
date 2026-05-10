@@ -1,5 +1,5 @@
 // ============================================================
-// AUTH — connects to API
+// AUTH — connects to API using JWT
 // ============================================================
 
 const API = "http://localhost:3000/api";
@@ -16,12 +16,10 @@ async function register() {
   const res = await fetch(`${API}/auth/register`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    credentials: "include",
     body: JSON.stringify({ username, password }),
   });
 
   const data = await res.json();
-
   if (!res.ok) {
     alert(data.message);
     return;
@@ -38,34 +36,31 @@ async function login() {
   const res = await fetch(`${API}/auth/login`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    credentials: "include",
     body: JSON.stringify({ username, password }),
   });
 
   const data = await res.json();
-
   if (!res.ok) {
     alert(data.message);
     return;
   }
 
-  sessionStorage.setItem("user", JSON.stringify(data.user));
+  localStorage.setItem("token", data.token);
+  localStorage.setItem("user", JSON.stringify(data.user));
   window.location.href = "dashboard.html";
 }
 
-async function checkAuth() {
-  const user = sessionStorage.getItem("user");
-  if (!user) {
+function checkAuth() {
+  const token = localStorage.getItem("token");
+  if (!token) {
     window.location.href = "login.html";
-    return;
+    return false;
   }
+  return true;
 }
 
 async function logout() {
-  await fetch(`${API}/auth/logout`, {
-    method: "POST",
-    credentials: "include",
-  });
-  sessionStorage.removeItem("user");
+  localStorage.removeItem("token");
+  localStorage.removeItem("user");
   window.location.href = "login.html";
 }

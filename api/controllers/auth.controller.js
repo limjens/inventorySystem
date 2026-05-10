@@ -1,9 +1,12 @@
 // ============================================================
-// AUTH CONTROLLER — register, login, logout
+// AUTH CONTROLLER — register, login, logout (JWT)
 // ============================================================
 
 const store = require("../data/store");
 const { v4: uuidv4 } = require("uuid");
+const jwt = require("jsonwebtoken");
+
+const SECRET = "inventory-secret-key";
 
 module.exports = {
   register: (req, res) => {
@@ -31,12 +34,18 @@ module.exports = {
     if (!user || user.password !== password)
       return res.status(401).json({ message: "Invalid username or password." });
 
-    req.session.user = { id: user.id, username: user.username };
-    res.json({ message: "Logged in successfully.", user: req.session.user });
+    const token = jwt.sign({ id: user.id, username: user.username }, SECRET, {
+      expiresIn: "1d",
+    });
+
+    res.json({
+      message: "Logged in successfully.",
+      token,
+      user: { id: user.id, username: user.username },
+    });
   },
 
   logout: (req, res) => {
-    req.session.destroy();
     res.json({ message: "Logged out successfully." });
   },
 };

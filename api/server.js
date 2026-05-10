@@ -1,26 +1,37 @@
-// ============================================================
-// SERVER — entry point
-// ============================================================
-
 const express = require("express");
 const session = require("express-session");
 const cors = require("cors");
+const path = require("path");
 
 const authRoutes = require("./routes/auth.routes");
 const productRoutes = require("./routes/products.routes");
 
 const app = express();
 
-app.use(cors({ origin: "http://127.0.0.1:5500", credentials: true }));
+app.use(
+  cors({
+    origin: "http://localhost:3000",
+    credentials: true,
+  }),
+);
+
 app.use(express.json());
+
 app.use(
   session({
     secret: "inventory-secret-key",
-    resave: false,
-    saveUninitialized: false,
-    cookie: { secure: false },
+    resave: true,
+    saveUninitialized: true,
+    cookie: {
+      secure: false,
+      sameSite: "lax",
+      httpOnly: false,
+      maxAge: 1000 * 60 * 60 * 24,
+    },
   }),
 );
+
+app.use(express.static(path.join(__dirname, "..")));
 
 app.use("/api/auth", authRoutes);
 app.use("/api/products", productRoutes);
