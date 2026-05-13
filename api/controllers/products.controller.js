@@ -1,16 +1,17 @@
 // ============================================================
-// PRODUCTS CONTROLLER — CRUD + duplicate prevention
+// PRODUCTS CONTROLLER — CRUD + duplicate prevention (MySQL)
 // ============================================================
 
-const store = require("../data/store");
+const pool = require("../data/store");
 const { v4: uuidv4 } = require("uuid");
 
 module.exports = {
-  getAll: (req, res) => {
-    res.json(store.getProducts());
+  getAll: async (req, res) => {
+    const [rows] = await pool.query("SELECT * FROM products");
+    res.json(rows);
   },
 
-  add: (req, res) => {
+  add: async (req, res) => {
     const { name, price, stock } = req.body;
 
     if (!name || price === undefined || stock === undefined)
@@ -18,36 +19,55 @@ module.exports = {
         .status(400)
         .json({ message: "Name, price and stock are required." });
 
-    const duplicate = store.findProductByName(name);
-    if (duplicate)
+    const [existing] = await pool.query(
+      "SELECT * FROM products WHERE LOWER(name) = LOWER(?)",
+      [name],
+    );
+
+    if (existing.length > 0)
       return res.status(409).json({ message: "Product already exists." });
 
-    const product = { id: uuidv4(), name, price, stock };
-    store.addProduct(product);
+    const id = uuidv4();
+    await pool.query(
+      "INSERT INTO products (id, name, price, stock) VALUES (?, ?, ?, ?)",
+      [id, name, price, stock],
+    );
 
-    res.status(201).json({ message: "Product added.", product });
+    res
+      .status(201)
+      .json({ message: "Product added.", product: { id, name, price, stock } });
   },
 
-  update: (req, res) => {
+  update: async (req, res) => {
     const { id } = req.params;
     const { name, price, stock } = req.body;
 
-    const existing = store.getProducts().find((p) => p.id === id);
-    if (!existing)
+    const [existing] = await pool.query("SELECT * FROM products WHERE id = ?", [
+      id,
+    ]);
+
+    if (existing.length === 0)
       return res.status(404).json({ message: "Product not found." });
 
-    store.updateProduct(id, { name, price, stock });
+    await pool.query(
+      "UPDATE products SET name = ?, price = ?, stock = ? WHERE id = ?",
+      [name, price, stock, id],
+    );
+
     res.json({ message: "Product updated." });
   },
 
-  remove: (req, res) => {
+  remove: async (req, res) => {
     const { id } = req.params;
 
-    const existing = store.getProducts().find((p) => p.id === id);
-    if (!existing)
+    const [existing] = await pool.query("SELECT * FROM products WHERE id = ?", [
+      id,
+    ]);
+
+    if (existing.length === 0)
       return res.status(404).json({ message: "Product not found." });
 
-    store.deleteProduct(id);
+    await pool.query("DELETE FROM products WHERE id = ?", [id]);
     res.json({ message: "Product deleted." });
   },
 };
