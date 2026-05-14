@@ -1,0 +1,287 @@
+/* ============================================
+   CUSTOM CSS FOR FLOWSTOCK LOGIN
+   Glassmorphism + Animations + Reusable Classes
+   ============================================ */
+
+/* ---------- RESET & BASE ---------- */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  height: 100%;
+  width: 100%;
+}
+
+/* ---------- BACKGROUND WITH ZOOM ANIMATION ---------- */
+.bg-image-container {
+  position: fixed;
+  inset: 0;
+  z-index: -10;
+  overflow: hidden;
+}
+
+.bg-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  animation: slowZoom 25s ease-in-out infinite alternate;
+}
+
+@keyframes slowZoom {
+  0% {
+    transform: scale(1);
+  }
+  100% {
+    transform: scale(1.1);
+  }
+}
+
+.dark-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(0, 0, 0, 0.65) 0%, rgba(0, 0, 0, 0.5) 100%);
+}
+
+.gradient-overlay {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 20% 30%, rgba(79, 70, 229, 0.25), transparent 70%);
+}
+
+/* ---------- GLASSMORPHISM CARD (REUSABLE) ---------- */
+.glass-card {
+  background: rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+  border-radius: 32px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  animation: cardFloat 0.7s cubic-bezier(0.2, 0.9, 0.4, 1.1) forwards;
+}
+
+.glass-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 25px 45px rgba(0, 0, 0, 0.3);
+  border-color: rgba(255, 255, 255, 0.5);
+}
+
+@keyframes cardFloat {
+  0% {
+    opacity: 0;
+    transform: translateY(35px) scale(0.96);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* ---------- GLASS INPUTS (REUSABLE) ---------- */
+.glass-input {
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(4px);
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  transition: all 0.25s ease-in-out;
+  color: white;
+  font-weight: 500;
+  border-radius: 20px;
+}
+
+.glass-input:focus {
+  background: rgba(255, 255, 255, 0.25);
+  border-color: rgba(255, 255, 255, 0.8);
+  outline: none;
+  box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.15);
+  transform: scale(1.01);
+}
+
+.glass-input::placeholder {
+  color: rgba(255, 255, 255, 0.7);
+  font-weight: 400;
+  letter-spacing: 0.3px;
+}
+
+/* Input icon hover effect */
+.input-icon {
+  color: rgba(255, 255, 255, 0.85);
+  transition: all 0.2s ease;
+  font-size: 1rem;
+  pointer-events: none;
+}
+
+.input-wrapper:hover .input-icon {
+  color: white;
+  transform: scale(1.08);
+}
+
+/* ---------- GLASS BUTTON (REUSABLE) ---------- */
+.btn-glass-login {
+  background: rgba(255, 255, 255, 0.18);
+  border: 1px solid rgba(255, 255, 255, 0.45);
+  transition: all 0.25s ease;
+  backdrop-filter: blur(6px);
+  border-radius: 40px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+/* Shine effect on button */
+.btn-glass-login::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.25), transparent);
+  transition: left 0.5s ease;
+}
+
+.btn-glass-login:hover::before {
+  left: 100%;
+}
+
+.btn-glass-login:hover {
+  background: rgba(255, 255, 255, 0.32);
+  border-color: rgba(255, 255, 255, 0.85);
+  transform: translateY(-2px);
+  box-shadow: 0 12px 28px -8px rgba(0, 0, 0, 0.35);
+}
+
+.btn-glass-login:active {
+  transform: translateY(1px);
+}
+
+/* ---------- GLASS LINK (REUSABLE) ---------- */
+.glass-link {
+  color: rgba(255, 255, 255, 0.95);
+  text-decoration: none;
+  font-weight: 600;
+  position: relative;
+  transition: all 0.2s ease;
+}
+
+.glass-link::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 0%;
+  height: 2px;
+  background: white;
+  transition: width 0.25s ease;
+}
+
+.glass-link:hover::after {
+  width: 100%;
+}
+
+.glass-link:hover {
+  color: white;
+  text-shadow: 0 0 6px rgba(255, 255, 255, 0.5);
+  transform: translateX(3px);
+}
+
+.forgot-link {
+  color: rgba(255, 255, 255, 0.75);
+  text-decoration: none;
+  transition: all 0.2s;
+}
+
+.forgot-link:hover {
+  color: white;
+  text-decoration: underline;
+}
+
+/* ---------- CUSTOM CHECKBOX ---------- */
+.custom-check {
+  accent-color: rgba(255, 255, 255, 0.9);
+  width: 16px;
+  height: 16px;
+  border-radius: 4px;
+  transition: transform 0.1s ease;
+  cursor: pointer;
+}
+
+.custom-check:active {
+  transform: scale(1.15);
+}
+
+/* ---------- FOOTER STYLES (REUSABLE) ---------- */
+.footer-glass {
+  backdrop-filter: blur(12px);
+  background: rgba(0, 0, 0, 0.35);
+  border-radius: 60px;
+  padding: 8px 20px;
+  transition: all 0.2s ease;
+  animation: footerRise 0.7s ease-out 0.2s backwards;
+  text-align: center;
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.footer-glass:hover {
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(16px);
+}
+
+@keyframes footerRise {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ---------- RESPONSIVE DESIGN ---------- */
+@media (max-width: 480px) {
+  .glass-card {
+    border-radius: 28px;
+    padding: 1.5rem !important;
+  }
+  
+  .btn-glass-login {
+    padding: 0.75rem;
+  }
+  
+  .footer-glass {
+    font-size: 10px;
+    padding: 6px 16px;
+  }
+}
+
+/* ---------- UTILITY CLASSES (REUSABLE ACROSS PROJECT) ---------- */
+.text-glow {
+  text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+}
+
+.hover-scale {
+  transition: transform 0.2s ease;
+}
+
+.hover-scale:hover {
+  transform: scale(1.02);
+}
+
+.fade-in {
+  animation: fadeIn 0.5s ease forwards;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
