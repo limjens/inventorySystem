@@ -60,4 +60,39 @@ module.exports = {
   logout: async (req, res) => {
     res.json({ message: "Logged out successfully." });
   },
+
+  getAll: async (req, res) => {
+    try {
+      const [rows] = await pool.query("SELECT id, username FROM users");
+      res.json(rows);
+    } catch (err) {
+      res.status(500).json({ message: "Failed to get users." });
+    }
+  },
+
+  update: async (req, res) => {
+    try {
+      const { username } = req.params;
+      const { password } = req.body;
+      if (!password)
+        return res.status(400).json({ message: "Password is required." });
+      await pool.query("UPDATE users SET password = ? WHERE username = ?", [
+        password,
+        username,
+      ]);
+      res.json({ message: "User updated." });
+    } catch (err) {
+      res.status(500).json({ message: "Failed to update user." });
+    }
+  },
+
+  delete: async (req, res) => {
+    try {
+      const { username } = req.params;
+      await pool.query("DELETE FROM users WHERE username = ?", [username]);
+      res.json({ message: "User deleted." });
+    } catch (err) {
+      res.status(500).json({ message: "Failed to delete user." });
+    }
+  },
 };
