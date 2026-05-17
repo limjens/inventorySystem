@@ -5,6 +5,7 @@ const path = require("path");
 
 const authRoutes = require("./routes/auth.routes");
 const productRoutes = require("./routes/products.routes");
+const transactionRoutes = require("./routes/transactions.routes");
 
 const app = express();
 
@@ -35,6 +36,7 @@ app.use(express.static(path.join(__dirname, "..")));
 
 app.use("/api/auth", authRoutes);
 app.use("/api/products", productRoutes);
+app.use("/api/transactions", transactionRoutes);
 
 const PORT = 3000;
 app.listen(PORT, () => {
